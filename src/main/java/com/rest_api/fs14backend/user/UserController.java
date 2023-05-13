@@ -1,57 +1,82 @@
 package com.rest_api.fs14backend.user;
 
+import com.rest_api.fs14backend.Authentication.AuthRequest;
 import com.rest_api.fs14backend.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
+@RequestMapping("api/v1/users")
 public class UserController {
 
   @Autowired
-  private AuthenticationManager authenticationManager;
+  private UserService userService;
   @Autowired
-  private UserRepository userRepository;
+  private AuthenticationManager authenticationManager;
   @Autowired
   private PasswordEncoder passwordEncoder;
   @Autowired
-  private JwtUtils jwtUtils;
+  private JwtUtils JwtUtils;
 
-  @GetMapping("/users")
+  @GetMapping()
   public List<User> findAll() {
-    System.out.println("we are inside users");
-    return userRepository.findAll();
+    return userService.findAll();
   }
 
-  @PostMapping("/signin")
-  public String login(@RequestBody AuthRequest authRequest){
+  @GetMapping("/{id}")
+  public User findById(@PathVariable UUID id) {
+    return userService.findById(id);
+  }
 
-    authenticationManager.authenticate(
-      new UsernamePasswordAuthenticationToken(
-        authRequest.getUsername(),
-        authRequest.getPassword()
-      )
-    );
-
-    User user = userRepository.findByUsername(authRequest.getUsername());
-
-    return jwtUtils.generateToken(user);
+  @PostMapping
+  public User createOne(@RequestBody User user) {
+    return userService.createOne(user);
   }
 
   @PostMapping("/signup")
-  public User signup(@RequestBody User user) {
-
-    User newUser = new User(user.getUsername(), passwordEncoder.encode(user.getPassword()));
-    userRepository.save(newUser);
-
-    return newUser;
+  public String signup(@RequestBody User user) {
+    User existingUser = userService.findUserByEmail(user.getEmail());
+    if (existingUser != null) {
+      return null;
+    }
+    user.setUsername(user.getUsername());
+    user.setFirstname(user.getFirstname());
+    user.setLastname(user.getLastname());
+    user.setPhone(user.getPhone());
+    user.setEmail(user.getEmail());
+    user.setPassword(passwordEncoder.encode(user.getPassword()));
+    user.setRole(Role.USER);
+    userService.createOne(user);
+    return JwtUtils.generateToken(user);
   }
 
+  @PostMapping("/signin")
+  public String login(@RequestBody AuthRequest authRequest) {
+    authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                    authRequest.getUsername(),
+                    authRequest.getPassword()
+            )
+    );
+    User user = userService.findUserName(authRequest.getUsername());
+    return JwtUtils.generateToken(user);
+
+  }
+
+  @PutMapping
+  public User updateOne(@RequestBody User user) {
+    return userService.updateOne(user);
+  }
+
+  @DeleteMapping("/{id}")
+  public void deleteOne(@PathVariable UUID id) {
+    userService.deleteById(id);
+  }
 }

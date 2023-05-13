@@ -1,6 +1,7 @@
 package com.rest_api.fs14backend.utils;
 
 import com.rest_api.fs14backend.user.User;
+import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -14,26 +15,26 @@ import java.util.function.Function;
 
 @Service
 public class JwtUtils {
-  final String secret = "ThisIsAMuchLongerPasswordOhBoysDoINeedMoreCharacters";
+  Dotenv dotenv = Dotenv.load();
 
-  // secret variable to be moved to .env
+  private final String SECRET_KEY = dotenv.get("SECRET_KEY");
+
   public String generateToken(User user) {
     Map<String, Object> claims = new HashMap<>();
     claims.put("user_id", user.getId());
     claims.put("username", user.getUsername());
+    claims.put("role", user.getRole());
 
-    return createToken(claims, user.getUsername());
+    return jwtToken(claims, user.getUsername());
   }
 
-  private String createToken(Map<String, Object> claims, String subject) {
-    return Jwts
-      .builder()
-      .setClaims(claims)
-      .setSubject(subject)
-      .setIssuedAt(new Date(System.currentTimeMillis()))
-      .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
-      .signWith(SignatureAlgorithm.HS256, secret).compact();
-
+  private String jwtToken(Map<String, Object> claims, String subject) {
+    return Jwts.builder()
+            .setClaims(claims)
+            .setSubject(subject)
+            .setIssuedAt(new Date(System.currentTimeMillis()))
+            .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
+            .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
   }
 
   public String extractUsername(String token) {
@@ -50,7 +51,7 @@ public class JwtUtils {
   }
 
   private Claims extractAllClaims(String token) {
-    return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+    return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
   }
 
   private Boolean isTokenExpired(String token) {
@@ -61,4 +62,5 @@ public class JwtUtils {
     final String username = extractUsername(token);
     return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
   }
+
 }

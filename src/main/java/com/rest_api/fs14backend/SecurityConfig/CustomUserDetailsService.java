@@ -3,10 +3,15 @@ package com.rest_api.fs14backend.SecurityConfig;
 import com.rest_api.fs14backend.user.User;
 import com.rest_api.fs14backend.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import java.util.ArrayList;
 
@@ -18,11 +23,12 @@ public class CustomUserDetailsService implements UserDetailsService {
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     User user = userRepository.findByUsername(username);
 
+    if (user == null) {
+      throw new UsernameNotFoundException("User not found");
+    }
+    Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
 
-    return new org.springframework.security.core.userdetails.User(
-      user.getUsername(),
-      user.getPassword(),
-      new ArrayList<>()
-    );
+    grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
+    return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), grantedAuthorities);
   }
 }

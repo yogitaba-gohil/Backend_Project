@@ -21,10 +21,9 @@ public class SecurityConfig {
 
   @Autowired
   private JwtFilter jwtFilter;
-
   @Bean
-  public AuthenticationManager authenticationManager(
-    AuthenticationConfiguration authenticationConfiguration
+  public AuthenticationManager authenticationManagerBean(
+          AuthenticationConfiguration authenticationConfiguration
   ) throws Exception {
     return authenticationConfiguration.getAuthenticationManager();
   }
@@ -37,22 +36,21 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
-      .csrf()
-      .disable()
-      .authorizeHttpRequests()
-      .requestMatchers("/signup", "/signin")
-      .permitAll()
-      .anyRequest()
-      .authenticated()
-      .and()
-      .sessionManagement()
-      .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-      .and()
-      .httpBasic(withDefaults()).formLogin()
-      .and()
-      // Add JWT token filter
-      .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-
+            .cors()
+            .and()
+            .csrf()
+            .disable()
+            .authorizeHttpRequests().requestMatchers("/api/v1/users/signup", "/api/v1/users/signin")
+            .permitAll()
+            .anyRequest()
+            .authenticated()
+            .and()
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
+            .httpBasic(withDefaults()).formLogin()
+            .and()
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class );
     return http.build();
   }
 }

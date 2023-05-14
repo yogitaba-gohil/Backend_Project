@@ -39,17 +39,21 @@ public class ProductService {
         return new ResponseEntity<>(products, HttpStatus.CREATED);
     }
 
+
+
     public Products updateProduct(Products products) {
         Products productToUpdate = productRepository.findById(products.getId()).orElse(null);
 
         if (productToUpdate == null) {
             return null;
         }
-        productToUpdate.setTitle(products.getTitle());
+        productToUpdate.setName(products.getName());
         productToUpdate.setDescription(productToUpdate.getDescription());
+        productToUpdate.setSlug(productToUpdate.getSlug());
         productToUpdate.setCategory(productToUpdate.getCategory());
-        productToUpdate.setImageUrl(products.getImageUrl());
+        productToUpdate.setImages(products.getImages());
         productToUpdate.setVariants(products.getVariants());
+        productToUpdate.setIsAvailable(products.getIsAvailable());
         productToUpdate.setSizes(products.getSizes());
         productToUpdate.setPrice(products.getPrice());
         return productRepository.save(productToUpdate);

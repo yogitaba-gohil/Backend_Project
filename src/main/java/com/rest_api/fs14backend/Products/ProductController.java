@@ -1,5 +1,7 @@
 package com.rest_api.fs14backend.Products;
 
+import com.rest_api.fs14backend.category.Category;
+import com.rest_api.fs14backend.category.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,12 @@ public class ProductController {
 
     @Autowired
     private final ProductService productService;
+
+    @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
+    private ProductMapper productMapper;
 
     public ProductController(ProductService productService) {
         this.productService = productService;
@@ -30,8 +38,11 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Products> createProduct(@RequestBody Products products) {
-        return productService.createProduct(products);
+    public ResponseEntity<Products> createProduct(@RequestBody ProductDTO productDTO) {
+        UUID categoryId = productDTO.getCategoryId();
+        Category category = categoryService.findById(categoryId);
+        Products product = productMapper.toProduct(productDTO, category);
+        return productService.createProduct(product);
     }
 
     @PutMapping

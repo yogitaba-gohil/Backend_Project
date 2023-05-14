@@ -45,14 +45,14 @@ public class UserController {
     User existingUser = userService.findUserByEmail(user.getEmail());
     if (existingUser != null) {
       return null;
-    }
+   }
     user.setUsername(user.getUsername());
     user.setFirstname(user.getFirstname());
     user.setLastname(user.getLastname());
     user.setPhone(user.getPhone());
     user.setEmail(user.getEmail());
     user.setPassword(passwordEncoder.encode(user.getPassword()));
-    user.setRole(Role.USER);
+    user.setRole(Role.ADMIN);
     userService.createOne(user);
     return JwtUtils.generateToken(user);
   }

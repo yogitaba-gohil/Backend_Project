@@ -13,7 +13,7 @@ public class CategoryController {
   @Autowired
   private CategoryRepository repo;
 
-  @PostMapping("/")
+  @PostMapping
   public Category createOne(@RequestBody Category category) {
     return repo.save(category);
   }

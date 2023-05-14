@@ -10,6 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity(name = "products")
@@ -23,8 +24,8 @@ public class Products {
     @UuidGenerator
     private UUID id;
 
-    @Column(nullable = false, columnDefinition = "varchar(50)")
-    private String title;
+    @Column(nullable = false, columnDefinition = "varchar(255)")
+    private String name;
 
     @Column(nullable = false)
     private Boolean isAvailable;
@@ -36,11 +37,15 @@ public class Products {
     private String sizes;
 
 
-    @Column(nullable = false, columnDefinition = "varchar(50)")
+    @Column(nullable = false, columnDefinition = "varchar(255)")
     private String description;
 
-    @Column(columnDefinition = "varchar(50)")
-    private String imageUrl;
+    @Column(nullable = false, columnDefinition = "varchar(255)")
+    private String slug;
+
+//    @ElementCollection
+    @Column(nullable = false)
+    private List<String> images;
 
     @Column(nullable = false, columnDefinition = "decimal")
     private Double price;
@@ -53,4 +58,25 @@ public class Products {
 
     @ManyToOne(optional = false)
     private Category category;
+
+    public Products(
+            String name,
+            String sizes,
+            Double price,
+            String description,
+            String slug,
+            List<String> images,
+            String variants,
+            Boolean isAvailable,
+            Category category) {
+        this.name = name;
+        this.price = price;
+        this.category = category;
+        this.description = description;
+        this.slug = slug;
+        this.images = images;
+        this.sizes = sizes;
+        this.variants = variants;
+        this.isAvailable = isAvailable;
+    }
 }

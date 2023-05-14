@@ -19,15 +19,6 @@ public class JwtUtils {
 
   private final String SECRET_KEY = dotenv.get("SECRET_KEY");
 
-  public String generateToken(User user) {
-    Map<String, Object> claims = new HashMap<>();
-    claims.put("user_id", user.getId());
-    claims.put("username", user.getUsername());
-    claims.put("role", user.getRole());
-
-    return jwtToken(claims, user.getUsername());
-  }
-
   private String jwtToken(Map<String, Object> claims, String subject) {
     return Jwts.builder()
             .setClaims(claims)
@@ -36,6 +27,17 @@ public class JwtUtils {
             .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
             .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
   }
+
+  public String generateToken(User user) {
+    Map<String, Object> claims = new HashMap<>();
+    claims.put("id", user.getId());
+    claims.put("username", user.getUsername());
+    claims.put("role", user.getRole());
+
+    return jwtToken(claims, user.getUsername());
+  }
+
+
 
   public String extractUsername(String token) {
     return extractClaim(token, Claims::getSubject);

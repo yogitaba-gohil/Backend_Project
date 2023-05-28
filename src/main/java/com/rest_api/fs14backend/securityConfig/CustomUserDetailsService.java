@@ -1,4 +1,4 @@
-package com.rest_api.fs14backend.SecurityConfig;
+package com.rest_api.fs14backend.securityConfig;
 
 import com.rest_api.fs14backend.user.User;
 import com.rest_api.fs14backend.user.UserRepository;
@@ -12,8 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
-
-import java.util.ArrayList;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {

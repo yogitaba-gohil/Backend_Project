@@ -1,5 +1,6 @@
-package com.rest_api.fs14backend.Products;
+package com.rest_api.fs14backend.products;
 
+import com.rest_api.fs14backend.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,11 @@ public class ProductService {
         return productRepository.findAll();
     }
 
+    public ResponseEntity<List<Products>> getProductsByIds(List<UUID> ids) {
+        List<Products> products = productRepository.findProductsByIdIn(ids);
+        return new ResponseEntity<>(products, HttpStatus.OK);
+    }
+
     public ResponseEntity<Products> getProductById(UUID id) {
         if (!productRepository.existsById(id)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -42,7 +48,7 @@ public class ProductService {
 
 
     public Products updateProduct(Products products) {
-        Products productToUpdate = productRepository.findById(products.getId()).orElse(null);
+        Products productToUpdate = productRepository.findById(products.getId()).orElseThrow(() -> new NotFoundException("product is not exist"));
 
         if (productToUpdate == null) {
             return null;
@@ -53,7 +59,6 @@ public class ProductService {
         productToUpdate.setCategory(productToUpdate.getCategory());
         productToUpdate.setImages(products.getImages());
         productToUpdate.setVariants(products.getVariants());
-        productToUpdate.setIsAvailable(products.getIsAvailable());
         productToUpdate.setSizes(products.getSizes());
         productToUpdate.setPrice(products.getPrice());
         return productRepository.save(productToUpdate);

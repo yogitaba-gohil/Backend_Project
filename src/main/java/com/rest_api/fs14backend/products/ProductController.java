@@ -1,7 +1,8 @@
-package com.rest_api.fs14backend.Products;
+package com.rest_api.fs14backend.products;
 
 import com.rest_api.fs14backend.category.Category;
 import com.rest_api.fs14backend.category.CategoryService;
+import com.rest_api.fs14backend.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,13 +10,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://127.0.0.1:5173")
 @RestController
 @RequestMapping("/api/v1/products")
 public class ProductController {
 
     @Autowired
-    private final ProductService productService;
+    private  ProductService productService;
 
     @Autowired
     private CategoryService categoryService;

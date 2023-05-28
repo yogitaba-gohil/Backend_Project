@@ -1,4 +1,4 @@
-package com.rest_api.fs14backend.Products;
+package com.rest_api.fs14backend.products;
 
 import com.rest_api.fs14backend.category.Category;
 import jakarta.persistence.*;
@@ -26,9 +26,6 @@ public class Products {
 
     @Column(nullable = false, columnDefinition = "varchar(255)")
     private String name;
-
-    @Column(nullable = false)
-    private Boolean isAvailable;
 
     @Column(nullable = false)
     private String variants;
@@ -67,7 +64,6 @@ public class Products {
             String slug,
             List<String> images,
             String variants,
-            Boolean isAvailable,
             Category category) {
         this.name = name;
         this.price = price;
@@ -77,6 +73,5 @@ public class Products {
         this.images = images;
         this.sizes = sizes;
         this.variants = variants;
-        this.isAvailable = isAvailable;
     }
 }

@@ -1,4 +1,4 @@
-package com.rest_api.fs14backend.Authentication;
+package com.rest_api.fs14backend.authentication;
 
 
 

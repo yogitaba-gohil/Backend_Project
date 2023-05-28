@@ -1,4 +1,4 @@
-package com.rest_api.fs14backend.Products;
+package com.rest_api.fs14backend.products;
 
 import com.rest_api.fs14backend.category.Category;
 import org.springframework.stereotype.Component;
@@ -14,7 +14,6 @@ public class ProductMapper {
                 product.getSlug(),
                 product.getImages(),
                 product.getVariants(),
-                product.getIsAvailable(),
                 category);
     }
 }

@@ -1,6 +1,6 @@
 package com.rest_api.fs14backend.user;
 
-import com.rest_api.fs14backend.Authentication.AuthRequest;
+import com.rest_api.fs14backend.authentication.AuthRequest;
 import com.rest_api.fs14backend.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://127.0.0.1:5173")
 @RestController
 @RequestMapping("api/v1/users")
 public class UserController {

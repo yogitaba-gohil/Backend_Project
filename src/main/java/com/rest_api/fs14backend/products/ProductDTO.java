@@ -1,4 +1,4 @@
-package com.rest_api.fs14backend.Products;
+package com.rest_api.fs14backend.products;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,5 +17,4 @@ public class ProductDTO {
     private String slug;
     private List<String> images;
     private  String variants;
-    private  Boolean isAvailable;
 }

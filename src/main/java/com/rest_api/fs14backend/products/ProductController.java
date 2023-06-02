@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
-@CrossOrigin(origins = "http://127.0.0.1:5173")
+@CrossOrigin(origins = {"http://127.0.0.1:5173", "https://front-end-project-liart.vercel.app"})
 @RestController
 @RequestMapping("/api/v1/products")
 public class ProductController {

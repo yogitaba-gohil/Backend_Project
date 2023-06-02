@@ -24,6 +24,15 @@ public class OrderController {
         return orderService.saveOrder(order);
     }
 
+    @DeleteMapping("/orders/{id}")
+    public void deleteOne(@PathVariable UUID id) {
+        orderService.deleteById(id);
+    }
+    @PutMapping("/orders/{id}")
+    public Order update(@RequestBody Order order) {
+        return orderService.update(order);
+    }
+
     @GetMapping("/{userId}")
     public List<Order> getOrdersByUserId(@PathVariable UUID userId) {
         return orderService.getOrdersByUserId(userId);

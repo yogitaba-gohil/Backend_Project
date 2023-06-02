@@ -17,7 +17,12 @@ public class OrderService {
     public List<Order> findAll() {
         return repository.findAll();
     }
-
+    public void deleteById(UUID id) {
+        repository.deleteById(id);
+    }
+    public Order update(Order order) {
+        return repository.save(order);
+    }
     public List<Order> getOrdersByUserId(UUID userId) {
         return repository.findOrdersByUserId(userId);
     }

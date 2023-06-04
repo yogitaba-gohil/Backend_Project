@@ -40,7 +40,7 @@ public class SecurityConfig {
             .and()
             .csrf()
             .disable()
-            .authorizeHttpRequests().requestMatchers("/api/v1/users/signup", "/api/v1/users/signin","/api/v1/products","/api/v1/products/{id}", "api/v1/payment", "api/v1/users","/api/v1/addresses","api/v1/addresses/user/{id}","api/v1/payment/user/{id}","api/v1/orders","api/v1/order-details/all-order-details")
+            .authorizeHttpRequests().requestMatchers("/api/v1/users/signup", "/api/v1/users/signin","/api/v1/products","/api/v1/products/{id}", "api/v1/payment","api/v1/users/{id}", "api/v1/users","/api/v1/addresses","api/v1/addresses/user/{id}","api/v1/payment/user/{id}","api/v1/orders","api/v1/orders/{id}","api/v1/order-details/all-order-details")
             .permitAll()
             .anyRequest()
             .authenticated()

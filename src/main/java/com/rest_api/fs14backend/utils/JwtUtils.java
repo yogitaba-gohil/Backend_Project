@@ -5,6 +5,8 @@ import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+//import lombok.Value;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +17,13 @@ import java.util.function.Function;
 
 @Service
 public class JwtUtils {
-  Dotenv dotenv = Dotenv.load();
+  public final String secret;
 
+  public JwtUtils(@Value("${jwt.secret}") String secret){
+    this.secret=secret;
+  }
+
+  Dotenv dotenv = Dotenv.load();
   private final String SECRET_KEY = dotenv.get("SECRET_KEY");
 
   private String jwtToken(Map<String, Object> claims, String subject) {
@@ -25,7 +32,7 @@ public class JwtUtils {
             .setSubject(subject)
             .setIssuedAt(new Date(System.currentTimeMillis()))
             .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
-            .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
+            .signWith(SignatureAlgorithm.HS256, secret).compact();
   }
 
   public String generateToken(User user) {

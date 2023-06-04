@@ -17,14 +17,14 @@ import java.util.function.Function;
 
 @Service
 public class JwtUtils {
-  public final String secret;
+  public final String SECRET_KEY;
 
-  public JwtUtils(@Value("${jwt.secret}") String secret){
-    this.secret=secret;
+  public JwtUtils(@Value("${jwt.secret}") String SECRET_KEY){
+    this.SECRET_KEY=SECRET_KEY;
   }
 
-  Dotenv dotenv = Dotenv.load();
-  private final String SECRET_KEY = dotenv.get("SECRET_KEY");
+//  Dotenv dotenv = Dotenv.load();
+//  private final String SECRET_KEY = dotenv.get("SECRET_KEY");
 
   private String jwtToken(Map<String, Object> claims, String subject) {
     return Jwts.builder()
@@ -32,7 +32,7 @@ public class JwtUtils {
             .setSubject(subject)
             .setIssuedAt(new Date(System.currentTimeMillis()))
             .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
-            .signWith(SignatureAlgorithm.HS256, secret).compact();
+            .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
   }
 
   public String generateToken(User user) {

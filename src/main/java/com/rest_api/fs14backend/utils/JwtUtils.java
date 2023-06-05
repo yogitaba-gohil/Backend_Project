@@ -16,14 +16,11 @@ import java.util.function.Function;
 
 @Service
 public class JwtUtils {
-  public final String secret;
 
 //  Dotenv dotenv = Dotenv.load();
-//  private final String SECRET_KEY = dotenv.get("SECRET_KEY");
+  private final String SECRET_KEY = "ThisIsAMuchLongerPasswordOhBoysDoINeedMoreCharacters";
 
-  public JwtUtils(@Value("${jwt.secret}") String secret){
-    this.secret=secret;
-  }
+
 
   private String jwtToken(Map<String, Object> claims, String subject) {
     return Jwts.builder()
@@ -31,7 +28,7 @@ public class JwtUtils {
             .setSubject(subject)
             .setIssuedAt(new Date(System.currentTimeMillis()))
             .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
-            .signWith(SignatureAlgorithm.HS256, secret).compact();
+            .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
   }
 
   public String generateToken(User user) {
@@ -59,7 +56,7 @@ public class JwtUtils {
   }
 
   private Claims extractAllClaims(String token) {
-    return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+    return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
   }
 
   private Boolean isTokenExpired(String token) {

@@ -1,11 +1,12 @@
 package com.rest_api.fs14backend.utils;
 
 import com.rest_api.fs14backend.user.User;
+import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -17,12 +18,12 @@ import java.util.function.Function;
 public class JwtUtils {
   public final String secret;
 
+//  Dotenv dotenv = Dotenv.load();
+//  private final String SECRET_KEY = dotenv.get("SECRET_KEY");
+
   public JwtUtils(@Value("${jwt.secret}") String secret){
     this.secret=secret;
   }
-
-//  Dotenv dotenv = Dotenv.load();
-//  private final String SECRET_KEY = dotenv.get("SECRET_KEY");
 
   private String jwtToken(Map<String, Object> claims, String subject) {
     return Jwts.builder()
